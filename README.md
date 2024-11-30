@@ -3,13 +3,12 @@
 I have implemented all the logic mentioned below, except for **Search**, **Sort**, and **Filter**.
 
 ### Validations:
-- **Textbox Validation:** I used JavaScript and regex for client-side validation.
+- **Textbox Validation:** I used JavaScript and regex for server-side validation.
 - **Login Validation:** On login, the credentials are checked. If valid, the user is redirected to the Dashboard; otherwise, an "invalid login details" alert is shown.
 - **Manage User Name on Dashboard:** User data is stored and managed via local storage.
 - **Field Validations:** 
   - **Email Validation:** Ensures a valid email format.
-  - **Numeric Validation:** Ensures only numeric values are entered where required.
-  - **Email Duplicate Check:** Checks for duplicate emails.
+  - **Numeric Validation:** Ensures only numeric values are entered where required, 10 digit phone number with +91 or 0 starting.
   - **File Upload Validation:** Only allows uploading of `.jpg` and `.png` files.
 
 ### Missing Features:
@@ -18,7 +17,7 @@ I have implemented all the logic mentioned below, except for **Search**, **Sort*
 - **Sorting:** Not implemented.
 
 ### Other Features:
-- **Paging on Grid:** Pagination implemented for better navigation.
+- **Paging on Grid:** Pagination implemented for better navigation 10 records per page.
 - **Active/Deactive Status:** User statuses can be toggled.
 - **Edit and Delete:** Options to edit or delete user records.
 - **Sorting:** Sorting on fields like Name, Email, ID, and Date are pending.
