@@ -86,20 +86,22 @@ const CreateEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("yes");
     const formData = new FormData();
+    
     Object.entries(employee).forEach(([key, value]) => {
       if (key === 'course') {
         formData.append(key, JSON.stringify(value));
+      } else if (key === 'image' && value) {
+        formData.append('image', value);
       } else if (value !== null) {
         formData.append(key, value);
       }
     });
-
+  
     try {
-      const response = await axios.post('/employees', employee, {
+      const response = await axios.post('/employees', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
       alert('Employee created successfully!');

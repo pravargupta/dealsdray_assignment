@@ -1,28 +1,64 @@
 import express from 'express';
+import multer from 'multer';
+import path from 'path';
 import Employee from '../models/Employees.js';
 
 const router = express.Router();
+// Add base URL configuration - adjust this to match your environment
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
 
-// Create Employee
-router.post('/', async (req, res) => {
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png/;
+    const mimeType = fileTypes.test(file.mimetype);
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimeType && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+  }
+});
+
+const DEFAULT_IMAGE = '/images/placeholder.png';
+
+router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { name, email, mobile, designation, gender, course, imageUrl } = req.body;
-    // console.log(req);
-    // console.log(name, email, mobile, designation, gender, course, imageUrl);
-    // Validation: Check for required fields
+    const { name, email, mobile, designation, gender, course } = req.body;
+    const imageUrl = req.file 
+      ? `${BASE_URL}/images/${req.file.filename}` 
+      : `${BASE_URL}${DEFAULT_IMAGE}`;
+
     if (!name || !email || !mobile || !designation || !gender || !course) {
-      console.error('Validation failed: Missing required fields');
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    // Save Employee
-    const employee = new Employee({ name, email, mobile, designation, gender, course, imageUrl });
+    const employee = new Employee({
+      name,
+      email,
+      mobile,
+      designation,
+      gender,
+      course: JSON.parse(course),
+      imageUrl
+    });
+
     await employee.save();
     res.status(201).json(employee);
   } catch (error) {
     console.error('Error saving employee:', error);
-    //check which field is missing
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.toString() });
   }
 });
 
@@ -47,11 +83,35 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update Employee
-router.post('/:id', async (req, res) => {
+// Update Employee route
+router.post('/:id', upload.single('image'), async (req, res) => {
   try {
-    const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedEmployee) return res.status(404).json({ message: 'Employee not found.' });
+    const { name, email, mobile, designation, gender, course } = req.body;
+    const updateData = {
+      name,
+      email,
+      mobile,
+      designation,
+      gender,
+      course: JSON.parse(course)
+    };
+
+    // Only update image if new file uploaded, otherwise keep existing or use default
+    if (req.file) {
+      updateData.imageUrl = `${BASE_URL}/images/${req.file.filename}`;
+    } else if (!req.body.imageUrl) {
+      updateData.imageUrl = `${BASE_URL}${DEFAULT_IMAGE}`;
+    }
+
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      req.params.id, 
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: 'Employee not found.' });
+    }
     res.json(updatedEmployee);
   } catch (error) {
     res.status(500).json({ message: error.message });

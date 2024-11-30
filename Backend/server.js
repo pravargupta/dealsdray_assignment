@@ -33,3 +33,5 @@ app.use('/api/employees', authMiddleware, employeeRoutes);
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.use('/images', express.static('public/images'));

@@ -98,15 +98,17 @@ const EmployeeEdit = () => {
     Object.entries(employee).forEach(([key, value]) => {
       if (key === 'course') {
         formData.append(key, JSON.stringify(value));
-      } else if (value !== null) {
+      } else if (key === 'image' && value instanceof File) {
+        formData.append('image', value);
+      } else if (key !== 'image' && value !== null) {
         formData.append(key, value);
       }
     });
-
+  
     try {
-      const response = await axios.post(`/employees/${id}`, employee, {
+      const response = await axios.post(`/employees/${id}`, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
       alert('Employee updated successfully!');
@@ -216,12 +218,22 @@ const EmployeeEdit = () => {
             BSC
           </label>
         </div>
-        <input
-          type="file"
-          name="image"
-          onChange={handleFileChange}
-          style={styles.fileInput}
-        />
+          {employee.imageUrl && (
+            <div style={{ marginBottom: '1rem' }}>
+              <img 
+                src={employee.imageUrl} 
+                alt="Current employee" 
+                style={{ maxWidth: '200px', display: 'block' }} 
+              />
+              <p>Current Image</p>
+            </div>
+          )}
+          <input
+            type="file"
+            name="image"
+            onChange={handleFileChange}
+            style={styles.fileInput}
+          />
         <button type="submit" style={styles.button}>Update</button>
       </form>
     </div>
