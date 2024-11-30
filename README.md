@@ -1,3 +1,30 @@
+## Implemented Features
+
+I have implemented all the logic mentioned below, except for **Search**, **Sort**, and **Filter**.
+
+### Validations:
+- **Textbox Validation:** I used JavaScript and regex for client-side validation.
+- **Login Validation:** On login, the credentials are checked. If valid, the user is redirected to the Dashboard; otherwise, an "invalid login details" alert is shown.
+- **Manage User Name on Dashboard:** User data is stored and managed via local storage.
+- **Field Validations:** 
+  - **Email Validation:** Ensures a valid email format.
+  - **Numeric Validation:** Ensures only numeric values are entered where required.
+  - **Email Duplicate Check:** Checks for duplicate emails.
+  - **File Upload Validation:** Only allows uploading of `.jpg` and `.png` files.
+
+### Missing Features:
+- **Search:** Not implemented.
+- **Filter:** Not implemented.
+- **Sorting:** Not implemented.
+
+### Other Features:
+- **Paging on Grid:** Pagination implemented for better navigation.
+- **Active/Deactive Status:** User statuses can be toggled.
+- **Edit and Delete:** Options to edit or delete user records.
+- **Sorting:** Sorting on fields like Name, Email, ID, and Date are pending.
+
+---
+
 ## Backend Setup
 
 1. **Navigate to the Backend directory:**
