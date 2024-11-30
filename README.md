@@ -43,8 +43,4 @@
 
 ## Additional Notes
 - Ensure you have the necessary tools installed (e.g., Node.js, npm).
-- Replace `your_secret_key_here` in the `.env` file with your actual JWT secret key.
-
----
-
-You can replace `Project Name` and `Description` with relevant details about your project. This README gives instructions for both backend and frontend setups, including JWT configuration.
+- Replace `JWT_SECRET` in the `.env` file with your actual JWT secret key.
