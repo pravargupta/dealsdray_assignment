@@ -32,16 +32,39 @@ const upload = multer({
 
 const DEFAULT_IMAGE = '/images/placeholder.png';
 
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validateMobile = (mobile) => {
+  // Matches: 
+  // - 10 digits (1234567890)
+  // - +91 followed by 10 digits (+911234567890)
+  // - 0 followed by 10 digits (01234567890)
+  const mobileRegex = /^(\+91|0)?[6-9]\d{9}$/;
+  return mobileRegex.test(mobile);
+};
+
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     const { name, email, mobile, designation, gender, course } = req.body;
-    const imageUrl = req.file 
-      ? `${BASE_URL}/images/${req.file.filename}` 
-      : `${BASE_URL}${DEFAULT_IMAGE}`;
-
+    
     if (!name || !email || !mobile || !designation || !gender || !course) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email format.' });
+    }
+
+    if (!validateMobile(mobile)) {
+      return res.status(400).json({ message: 'Invalid mobile number format. Must be 10 digits, optionally starting with +91 or 0.' });
+    }
+
+    const imageUrl = req.file 
+      ? `${BASE_URL}/images/${req.file.filename}` 
+      : `${BASE_URL}${DEFAULT_IMAGE}`;
 
     const employee = new Employee({
       name,
@@ -83,6 +106,15 @@ router.get('/:id', async (req, res) => {
 router.post('/:id', upload.single('image'), async (req, res) => {
   try {
     const { name, email, mobile, designation, gender, course } = req.body;
+
+    if (email && !validateEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email format.' });
+    }
+
+    if (mobile && !validateMobile(mobile)) {
+      return res.status(400).json({ message: 'Invalid mobile number format. Must be 10 digits, optionally starting with +91 or 0.' });
+    }
+
     const updateData = {
       name,
       email,
