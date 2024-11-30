@@ -17,7 +17,7 @@ const EmployeeEdit = () => {
 
   const styles = {
     container: {
-      padding: '2rem',
+      padding: '4rem',
       maxWidth: '800px',
       margin: '0 auto',
       backgroundColor: 'white',

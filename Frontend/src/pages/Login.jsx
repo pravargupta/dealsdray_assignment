@@ -24,9 +24,9 @@ const Login = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
     
-        const data = await response.json(); // Get the response data
-        await login(data); // Update auth context
-        navigate('/employees'); // Navigate to dashboard or home page
+        const data = await response.json();
+        await login(data);
+        navigate('/employees');
         
       } catch (err) {
         console.error('Login failed:', err);
@@ -37,7 +37,7 @@ const Login = () => {
 
   const styles = {
     container: {
-      padding: '2rem',
+      padding: '4rem',
       maxWidth: '1200px',
       margin: '0 auto'
     },

@@ -7,7 +7,7 @@ const EmployeeSchema = new mongoose.Schema({
   designation: { type: String, enum: ['HR', 'Manager', 'Sales'], required: true },
   gender: { type: String, enum: ['Male', 'Female'], required: true },
   course: [{ type: String, enum: ['MCA', 'BCA', 'BSC'] }],
-  imageUrl: { type: String }, // optional image upload for now
+  imageUrl: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

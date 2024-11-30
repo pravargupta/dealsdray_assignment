@@ -8,7 +8,7 @@ const EmployeeList = () => {
   const recordsPerPage = 10;
   const styles = {
     container: {
-      padding: '2rem',
+      padding: '4rem',
       maxWidth: '1200px',
       margin: '0 auto'
     },
@@ -180,7 +180,6 @@ const EmployeeList = () => {
         </tbody>
       </table>
   
-      {/* Pagination Controls */}
       <div style={styles.pagination}>
         <button
           style={{

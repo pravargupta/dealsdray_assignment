@@ -4,7 +4,6 @@ import path from 'path';
 import Employee from '../models/Employees.js';
 
 const router = express.Router();
-// Add base URL configuration - adjust this to match your environment
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
 
 const storage = multer.diskStorage({
@@ -62,7 +61,6 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// Get All Employees
 router.get('/', async (req, res) => {
   try {
     const employees = await Employee.find();
@@ -72,7 +70,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get Employee by ID
 router.get('/:id', async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.id);
@@ -83,7 +80,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update Employee route
 router.post('/:id', upload.single('image'), async (req, res) => {
   try {
     const { name, email, mobile, designation, gender, course } = req.body;
@@ -96,7 +92,6 @@ router.post('/:id', upload.single('image'), async (req, res) => {
       course: JSON.parse(course)
     };
 
-    // Only update image if new file uploaded, otherwise keep existing or use default
     if (req.file) {
       updateData.imageUrl = `${BASE_URL}/images/${req.file.filename}`;
     } else if (!req.body.imageUrl) {
@@ -118,7 +113,6 @@ router.post('/:id', upload.single('image'), async (req, res) => {
   }
 });
 
-// Delete Employee
 router.delete('/:id', async (req, res) => {
   try {
     const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
